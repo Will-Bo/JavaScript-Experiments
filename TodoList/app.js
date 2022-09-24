@@ -2,10 +2,12 @@
 const todoInput = document.querySelector('.todo-input');
 const todoButton = document.querySelector('.todo-button');
 const todoList = document.querySelector('.todo-list');
+const filterOption = document.querySelector('.filter-todo');
 
 // Event Listeners
 todoButton.addEventListener('click', addTodo);
 todoList.addEventListener('click', deleteCheck);
+filterOption.addEventListener('click', filterTodo);
 
 // Functions
 function addTodo(event){
@@ -48,7 +50,6 @@ function addTodo(event){
 
     // Clear Todo input value
     todoInput.value = "";
-
 }
 
 function deleteCheck(event){
@@ -57,7 +58,13 @@ function deleteCheck(event){
 
     // Delete todo
     if (item.classList[0] === "trash-btn"){
-        item.parentElement.remove();
+        // Animation on the list item
+        todoElement = item.parentElement;
+        todoElement.classList.add('fall');
+        // Waiting for the transition to end -- from the CSS
+        todoElement.addEventListener('transitionend', function(){
+            todoElement.remove();
+        });
     }
 
     // If the check button is pressed, mark the item as being "completed"
@@ -66,3 +73,39 @@ function deleteCheck(event){
     }
 }
 
+
+function filterTodo(event){
+    const todos = todoList.childNodes;
+
+    todos.forEach(function(todo){
+        // There are some items in todos that are not DIVs...it would be nice to be able to remove them. 
+        if (todo.tagName != 'DIV'){
+ //           console.log("not a div");
+        }
+        
+        // Validity checking -- some of the elements of 'todo' are empty text elements, so I make sure that only divs can make it into this function
+        if(todo.tagName == 'DIV'){
+            switch(event.target.value){
+                case "all":
+                    todo.style.display = 'flex';
+                    break;
+                case "completed":
+                    if(todo.classList.contains('completed')){
+                        todo.style.display = 'flex';
+                    }
+                    else{
+                        todo.style.display = 'none';
+                    }
+                    break;
+                case "uncompleted":
+                    if(!todo.classList.contains("completed")){
+                        todo.style.display = "flex";
+                    }
+                    else{
+                        todo.style.display = "none";
+                    }
+                    break;
+            }
+        }
+    });
+}
