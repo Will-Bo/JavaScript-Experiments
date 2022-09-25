@@ -5,6 +5,7 @@ const todoList = document.querySelector('.todo-list');
 const filterOption = document.querySelector('.filter-todo');
 
 // Event Listeners
+document.addEventListener('DOMContentLoaded', getTodos);
 todoButton.addEventListener('click', addTodo);
 todoList.addEventListener('click', deleteCheck);
 filterOption.addEventListener('click', filterTodo);
@@ -30,6 +31,9 @@ function addTodo(event){
 
     //Inserting the Todo into the Div
     todoDiv.appendChild(newTodo);
+
+    // Save todo to local storage
+    saveLocalTodos(newTodo);
 
     // Completed button
     const completedButton = document.createElement('button');
@@ -61,6 +65,7 @@ function deleteCheck(event){
         // Animation on the list item
         todoElement = item.parentElement;
         todoElement.classList.add('fall');
+        removeLocalTodos(todoElement);
         // Waiting for the transition to end -- from the CSS
         todoElement.addEventListener('transitionend', function(){
             todoElement.remove();
@@ -108,4 +113,81 @@ function filterTodo(event){
             }
         }
     });
+}
+
+function saveLocalTodos(todo){
+    // todo is the entire div at first -- just set it equal to the text inside in order to save that. 
+    todo = todo.innerText;
+    let todos;
+    console.log(todo.innerText);
+    if (localStorage.getItem('todos') === null){
+        todos = [];
+    }
+    else{
+        todos = JSON.parse(localStorage.getItem('todos'));
+    }
+
+    todos.push(todo);
+    console.log(todos);
+    localStorage.setItem('todos', JSON.stringify(todos));
+}
+
+function getTodos(){
+    let todos;
+    if (localStorage.getItem('todos') === null){
+        todos = [];
+    }
+    else{
+        todos = JSON.parse(localStorage.getItem('todos'));
+    }
+
+    todos.forEach(function(todo){
+         // Todo div
+//        console.log(todo);
+
+        const todoDiv = document.createElement('div');
+        todoDiv.classList.add('todo');
+
+        // Create LI
+        const newTodo = document.createElement('li');
+        // Using todoInput's value (from the form) as the text inside our todo items
+        // Pulls from the HTML form's 'input' tag
+        newTodo.innerText = todo;
+        newTodo.classList.add('todo-item');
+
+        //Inserting the Todo into the Div
+        todoDiv.appendChild(newTodo);
+
+        // Completed button
+        const completedButton = document.createElement('button');
+        //Adding HTML FontAwesome image inside of the button
+        completedButton.innerHTML = '<i class="fas fa-check"></i>';
+        completedButton.classList.add("complete-btn");
+        todoDiv.appendChild(completedButton);
+
+        // Trash button
+        const trashButton = document.createElement('button');
+        //Adding HTML FontAwesome image inside of the button
+        trashButton.innerHTML = '<i class="fas fa-trash"></i>';
+        trashButton.classList.add("trash-btn");
+        todoDiv.appendChild(trashButton);
+
+        // Append to list
+        todoList.appendChild(todoDiv);
+            
+    });
+}
+
+function removeLocalTodos(todo){
+    let todos;
+    if (localStorage.getItem('todos') === null){
+        todos = [];
+    }
+    else{
+        todos = JSON.parse(localStorage.getItem('todos'));
+    }
+    const todoIndex = (todo.children[0].innerText); 
+    todos.splice(todos.indexOf(todoIndex), 1);
+
+    localStorage.setItem('todos', JSON.stringify(todos));
 }
