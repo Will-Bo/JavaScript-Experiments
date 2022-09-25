@@ -12,11 +12,8 @@ filterOption.addEventListener('click', filterTodo);
 
 // Functions
 function addTodo(event){
-    // Prevent form from submitting
+    // Prevent form from submitting automatically
     event.preventDefault()
-
-    // A simple test to make sure the button works
-    //console.log("hello");
 
     // Todo div
     const todoDiv = document.createElement('div');
@@ -119,7 +116,6 @@ function saveLocalTodos(todo){
     // todo is the entire div at first -- just set it equal to the text inside in order to save that. 
     todo = todo.innerText;
     let todos;
-    console.log(todo.innerText);
     if (localStorage.getItem('todos') === null){
         todos = [];
     }
@@ -143,7 +139,6 @@ function getTodos(){
 
     todos.forEach(function(todo){
          // Todo div
-//        console.log(todo);
 
         const todoDiv = document.createElement('div');
         todoDiv.classList.add('todo');
@@ -174,18 +169,19 @@ function getTodos(){
 
         // Append to list
         todoList.appendChild(todoDiv);
-            
     });
 }
 
 function removeLocalTodos(todo){
     let todos;
+
     if (localStorage.getItem('todos') === null){
         todos = [];
     }
     else{
         todos = JSON.parse(localStorage.getItem('todos'));
     }
+
     const todoIndex = (todo.children[0].innerText); 
     todos.splice(todos.indexOf(todoIndex), 1);
 
