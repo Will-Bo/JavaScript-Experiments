@@ -17,10 +17,10 @@ const data = {
         data: [5, 23, 13, 3],
 
         backgroundColor: [
-            'rgba(3, 218, 198, 0.2)',
-            'rgba(187, 134, 252, 0.2)',
-            'rgba(55, 0, 179, 0.2)',
-            'rgba(250, 163, 86, 0.2)'
+            'rgba(3, 218, 198, 1)',
+            'rgba(187, 134, 252, 1)',
+            'rgba(55, 0, 179, 1)',
+            'rgba(250, 163, 86, 1)'
         ],
         
         borderColor: [
@@ -41,18 +41,83 @@ const plugin = {
         ctx.fillStyle = 'black';
         ctx.fillRect(0, 0, chart.width, chart.height);
         ctx.restore();
+    },
+};
+
+const titlePlugin = {
+    title: {
+        display: true,
+        text: "Will's GitHub Commits",
     }
+};
+
+const legendPlugin = {
+    legend: {
+        display: true,
+        labels: {
+            font: {
+                color: 'white'
+            }
+        }
+    },
 };
 
 const config = {
                 type: 'bar',
                 data: data,
-                options: {}
-//                plugins: [plugin]
+                options: {
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#02d6ed'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#02d6ed'
+                            }
+                        }
+                    },
+                    grid: {
+                        color: 'white'
+                    },
+
+                    title: {
+                        display: true,
+                        text: "Will's GitHub Commits",
+                        color: "white"
+                    },
+                    legend: {
+                        display: false,
+                        labels: {
+                            font: {
+                                color: 'white'
+                            }
+                        }
+                    }
+
+                },
+                plugins: [plugin]//, titlePlugin, legendPlugin]
+/*                plugins: {
+                    beforeDraw: (chart) => {
+                        const {ctx} = chart;
+                        ctx.save();
+                        ctx.globalCompositeOperation = 'destination-over';
+                        ctx.fillStyle = 'black';
+                        ctx.fillRect(0, 0, chart.width, chart.height);
+                        ctx.restore();
+                    },
+                    title: {
+                        display: true,
+                        text: "Will's GitHub Commits",
+                    },
+                    legend: {
+                        display: false,
+                    },
+                }*/
             };
 
 const myChart = new Chart(
                 document.getElementById('myChart'),
                 config
                 );
-
